@@ -1,95 +1,67 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client'
 
-export default function Home() {
+import { Box, Button, Checkbox, FormControl, FormErrorMessage, FormLabel, Grid, Input, VStack } from '@chakra-ui/react'
+import { Field, Form, Formik } from 'formik'
+
+const HomePage = () => {
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <>
+      <Grid minH='100vh' placeItems='center'>
+        <Box bg='gray.700' color='white' p={6} borderRadius='md' >
+          <Formik initialValues={{
+            email: '',
+            password: '',
+            rememberMe: false
+          }}
+            onSubmit={(values) => (
+              alert(JSON.stringify(values, null, 2))
+            )}>
+            {({ handleSubmit, errors, touched }) => (
+              <Form onSubmit={handleSubmit}>
+                <VStack spacing={4}>
+                  <FormControl isInvalid={!!errors.email && touched.email}>
+                    <FormLabel htmlFor='email'>Email</FormLabel>
+                    <Field as={Input} name='email' id='email' type='email' variant='filled' placeholder='Enter your email' validate={(value: string) => {
+                      let error
+                      if (!value) {
+                        error = 'Email is required'
+                      }
+                      return error
+                    }} />
+                    <FormErrorMessage>
+                      {errors.email}
+                    </FormErrorMessage>
+                  </FormControl >
+                  <FormControl isInvalid={!!errors.password && touched.password}>
+                    <FormLabel htmlFor='password'>Password</FormLabel>
+                    <Field as={Input} name='password' id='password' type='password' variant='filled' placeholder='Password' validate={(value: string) => {
+                      let error
+                      if (!value) {
+                        error = 'Password is required'
+                      } else if (value.length < 8) {
+                        error = 'Password must be at least 8 characters long'
+                      }
+                      return error
+                    }} />
+                    <FormErrorMessage>
+                      {errors.password}
+                    </FormErrorMessage>
+                  </FormControl>
+                  <FormControl>
+                    <Field colorScheme='whatsapp' as={Checkbox} id='rememberMe' name='rememberMe' type='checkbox'>
+                      Remember Me
+                    </Field>
+                  </FormControl>
+                  <Button colorScheme='whatsapp' w='full' type='submit'>Submit</Button>
+                </VStack>
+              </Form>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+            )}
+          </Formik>
+        </Box>
+      </Grid>
+    </>
   )
 }
+
+export default HomePage
